@@ -3,7 +3,7 @@ import {createPool} from "mysql2/promise";
 export const pool =createPool({
     host:'localhost',
     user:'root',
-    database:'megakmapproject',
+    database:'megak_mapproject',
     namedPlaceholders:true,
     decimalNumbers:true,
 })

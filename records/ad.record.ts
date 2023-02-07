@@ -1,5 +1,11 @@
 import {AdEntity} from "../types";
 import {ValidationError} from "../utils/handleErrors";
+import {promises} from "dns";
+import {pool} from "../utils/db";
+import {FieldPacket} from "mysql2";
+import{v4}from'uuid'
+
+type AdRecordResults = [AdEntity[],FieldPacket[]]
 
 export class AdRecord implements AdEntity{
    public description: string;
@@ -11,6 +17,7 @@ export class AdRecord implements AdEntity{
    public url: string;
 
    constructor(obj:AdEntity) {
+
        if(!obj.name||obj.name.length>100){
            throw new ValidationError('Nazwa nie może być pusta i nie może być dłuższa niż 100 znaków.')
        }
@@ -32,5 +39,12 @@ export class AdRecord implements AdEntity{
        this.lat=obj.lat;
        this.lon=obj.lon
    }
+
+   static async getOne(id:string):Promise<AdRecord|null>{
+const [result] = await pool.execute("SELECT * FROM `ads` WHERE `id` = :id",{
+    id:id,
+}) as AdRecordResults
+       return result.length ===0?null: new AdRecord(result[0])
+   };
 
 }

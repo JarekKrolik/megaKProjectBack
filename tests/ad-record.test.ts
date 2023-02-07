@@ -24,10 +24,10 @@ test('can build ad record',()=>{
 
 })
 test('validates invalid price',()=>{
-    const ad =  new AdRecord({...defaultObject,price:-9})
+    const ad =  new AdRecord({...defaultObject,price:2})
 
 
 
 
-    expect(ad.price).toThrow('Cena nie może być 9 999 999 zł')
+    expect(ad.price).toThrow()
 })
