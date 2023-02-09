@@ -1,4 +1,4 @@
-import {AdEntity} from "../types";
+import {AdEntity, SingleAdEntity} from "../types";
 import {ValidationError} from "../utils/handleErrors";
 import {promises} from "dns";
 import {pool} from "../utils/db";
@@ -17,7 +17,7 @@ export class AdRecord implements AdEntity{
    public url: string;
 
    constructor(obj:AdEntity) {
-
+if(!obj.id){obj.id=v4()}
        if(!obj.name||obj.name.length>100){
            throw new ValidationError('Nazwa nie może być pusta i nie może być dłuższa niż 100 znaków.')
        }
@@ -63,21 +63,23 @@ return this.id;
 
    }
 
-   static async ListAdsByCriteria(value:string):Promise<(AdRecord | AdRecord[])[]|null>{
+   static async ListAdsByCriteria(value:string):Promise<SingleAdEntity[]|null>{
 const[result]=await pool.execute("SELECT * FROM `ads` WHERE `name`LIKE :value",{
     value:`%${value}%`
-}) as [AdRecord[],FieldPacket[]]
+}) as [SingleAdEntity[],FieldPacket[]]
 
        // const[resultTwo]=await pool.execute("SELECT * FROM `ads` WHERE `description`LIKE :value",{
        //     value:`%${value}%`
        // }) as [AdRecord[],FieldPacket[]]
 
        // const results = [...resultOne,...resultTwo]
-
-
-
-
-     return result.length===0?null:result.map(result=>new AdRecord(result))
+     return result.length===0?null:result.map(result=>{
+         const{lon,lat,id}=result;
+         return({
+             id,lat,lon,
+         })
+         }
+     )
    }
 
 
