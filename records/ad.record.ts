@@ -47,4 +47,38 @@ const [result] = await pool.execute("SELECT * FROM `ads` WHERE `id` = :id",{
        return result.length ===0?null: new AdRecord(result[0])
    };
 
+ async  addOne ():Promise<string>{
+if(!this.id){this.id=v4()}
+
+    await  pool.execute("INSERT INTO `ads`(`id`, `name`, `description`, `price`, `url`, `lat`, `lon`) VALUES (:id,:name,:description,:price,:url,:lat,:lon)",{
+           id:this.id,
+           name:this.name,
+           description:this.description,
+           price:this.price,
+           url:this.url,
+           lat:this.lat,
+           lon:this.lon,
+       });
+return this.id;
+
+   }
+
+   static async ListAdsByCriteria(value:string):Promise<(AdRecord | AdRecord[])[]|null>{
+const[result]=await pool.execute("SELECT * FROM `ads` WHERE `name`LIKE :value",{
+    value:`%${value}%`
+}) as [AdRecord[],FieldPacket[]]
+
+       // const[resultTwo]=await pool.execute("SELECT * FROM `ads` WHERE `description`LIKE :value",{
+       //     value:`%${value}%`
+       // }) as [AdRecord[],FieldPacket[]]
+
+       // const results = [...resultOne,...resultTwo]
+
+
+
+
+     return result.length===0?null:result.map(result=>new AdRecord(result))
+   }
+
+
 }

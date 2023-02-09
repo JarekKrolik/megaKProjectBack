@@ -18,3 +18,35 @@ test('AdRecord returns null for not existing entry',async ()=>{
 
 
 })
+
+test('adding new add to the database',async ()=>{
+    const defaultObject= {
+
+        name:'test',
+        lon:0,
+        lat:0,
+        description:'blah',
+        url:'https://www.wp.pl',
+        price:0,
+
+
+    }
+    const ad = new AdRecord(defaultObject);
+
+     const addedId = await ad.addOne();
+
+
+    expect(addedId).toBeDefined()
+
+
+
+})
+
+test('find specific ad',async ()=>{
+
+   const newAd = await AdRecord.ListAdsByCriteria('');
+console.log(newAd)
+   expect(newAd).toBeDefined()
+
+
+})
