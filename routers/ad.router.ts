@@ -13,10 +13,14 @@ export const adRouter = Router()
          res.json(foundAd)
 
      })
-     .post('/',async (res:Response,req:Request)=>{
+     .post('/',async (req:Request,res:Response)=>{
+
+
+
+
          const newAd = await new AdRecord(req.body);
          await newAd.addOne();
-         res.send('ok')
+         res.json(newAd)
 
 
      })

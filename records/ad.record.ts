@@ -17,7 +17,7 @@ export class AdRecord implements AdEntity{
    public url: string;
 
    constructor(obj:AdEntity) {
-if(!obj.id){obj.id=v4()}
+// if(!obj.id){obj.id=v4()}
        if(!obj.name||obj.name.length>100){
            throw new ValidationError('Nazwa nie może być pusta i nie może być dłuższa niż 100 znaków.')
        }
