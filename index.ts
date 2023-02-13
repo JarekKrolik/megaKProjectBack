@@ -5,13 +5,14 @@ import {handleErrors, ValidationError} from "./utils/handleErrors";
 import rateLimit from 'express-rate-limit';
 import {AdRecord} from "./records/ad.record";
 import {adRouter} from "./routers/ad.router";
+import {configCorsUrl} from "./utils/configCorsUrl";
 const bodyParser = require('body-parser')
 
 const app =express()
 
 
 app.use(cors({
-    origin:'http://localhost:3000',
+    origin:configCorsUrl,
 }));
 app.use(json());
 app.use(bodyParser.json())
